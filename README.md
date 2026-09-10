@@ -91,43 +91,34 @@ recursively for `SKILL.md`. Restart pi.
 The `description` is what the model sees in every prompt; make it say *when* to
 use the skill. Only the description stays in context — the body loads on demand.
 
-### Add a third-party package (npm)
+### Add or remove a third-party package
+
+`scripts/pkg.sh` does the npm install and the manifest wiring in one step:
 
 ```bash
-npm install some-pi-package
-node -e "console.log(require('./node_modules/some-pi-package/package.json').pi)"
+scripts/pkg.sh add pi-whatever                  # npm
+scripts/pkg.sh add github:owner/repo#v1.2.3     # git-only, pinned tag
+scripts/pkg.sh remove pi-whatever
+scripts/pkg.sh check                            # manifest paths vs node_modules
 ```
 
-Then copy the paths that command prints into this repo's manifest, prefixed with
-`node_modules/some-pi-package/`:
+`add` reads the dependency's own `pi` block (or falls back to its convention
+directories), prefixes each path with `node_modules/<name>/`, and appends it to
+the matching key in our manifest. It prints every path it wired. Then commit
+`package.json` + `package-lock.json` and restart pi.
 
-```json
-"extensions": ["extensions", "node_modules/some-pi-package/index.ts"],
-"skills":     ["skills",     "node_modules/some-pi-package/skills"]
-```
+Two cases it handles on purpose:
 
-Commit `package.json` + `package-lock.json`. Restart pi.
+- **A package whose extension self-registers skills** (superpowers, via a
+  `resources_discover` hook) gets its `skills` path skipped — listing it here
+  too makes every skill collide with itself.
+- **A path the dependency declares but does not ship** is skipped instead of
+  wired, so `check` stays green.
 
-### Add a third-party package (git only, like superpowers)
+Do it by hand only when a package needs a partial path (one file out of its
+`extensions/` dir, say) — edit the manifest and keep the npm dependency.
 
-```bash
-npm install github:owner/repo#v1.2.3
-```
-
-Pinning the tag is what keeps three machines identical. Same manifest step as
-above. Some git packages register their own skill directories from inside their
-extension (superpowers does this via a `resources_discover` hook) — those must
-*not* be listed in `skills`, or every skill collides with itself.
-
-### Remove a package
-
-```bash
-npm uninstall some-pi-package
-```
-
-…and delete its lines from the manifest. Leaving a stale manifest path is
-harmless-ish but noisy; leaving the dependency without the manifest path just
-wastes disk.
+Pinning matters for git specs: `#v1.2.3` is what keeps three machines identical.
 
 Temporary disable without editing anything: `pi config` (Tab switches global /
 project scope) toggles individual extensions, skills, prompts, and themes off.
@@ -233,6 +224,7 @@ pi -ne -ns -e . --no-session -p "Quote the headings of the personal rules in you
 | `rules/beads.md` | `br`/`bd` issue-tracker workflow, gated |
 | `rules/treehouse.md` | Pooled worktree rules, gated |
 | `skills/` | My own skills (`find-skills`) |
+| `scripts/pkg.sh` | `add` / `remove` / `check` a bundled package |
 | `test.mjs` | Asserts the conditional injection |
 
 Bundled: ponytail, caveman, pi-web-access, pi-multimodal-proxy, pi-subagents,
