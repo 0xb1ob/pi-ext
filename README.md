@@ -4,7 +4,7 @@ One pi package that carries my whole setup to any machine: skills, extensions,
 and always-on working rules.
 
 - Install: `pi install git:github.com/<you>/personal-extensions@v1`
-- Local dev on this checkout: `npm install && pi install /Users/0xb1ob/Workspace/personal-extensions`
+- Local dev on this checkout: `npm install && pi install /path/to/personal-extensions`
 - Test: `node test.mjs`
 
 ---
@@ -16,7 +16,7 @@ and always-on working rules.
 `~/.pi/agent/settings.json` contains a single entry:
 
 ```json
-"packages": ["/Users/0xb1ob/Workspace/personal-extensions"]
+"packages": ["/path/to/personal-extensions"]
 ```
 
 On startup pi reads that package and loads every resource it declares. Nothing
@@ -109,9 +109,13 @@ the matching key in our manifest. It prints every path it wired. Then commit
 
 Two cases it handles on purpose:
 
-- **A package whose extension self-registers skills** (superpowers, via a
-  `resources_discover` hook) gets its `skills` path skipped — listing it here
-  too makes every skill collide with itself.
+- **A package whose extension self-registers skills** (via a `resources_discover`
+  hook) gets its `skills` path skipped — listing it here too makes every skill
+  collide with itself. Superpowers is *not* loaded that way: its extension is
+  omitted (it bootstraps `using-superpowers` into every session) and only the
+  kept skill folders are listed in the manifest. Excluded: `dispatching-parallel-agents`,
+  `executing-plans`, `finishing-a-development-branch`, `subagent-driven-development`,
+  `using-git-worktrees`, `using-superpowers`.
 - **A path the dependency declares but does not ship** is skipped instead of
   wired, so `check` stays green.
 
@@ -227,5 +231,5 @@ pi -ne -ns -e . --no-session -p "Quote the headings of the personal rules in you
 | `scripts/pkg.sh` | `add` / `remove` / `check` a bundled package |
 | `test.mjs` | Asserts the conditional injection |
 
-Bundled: ponytail, caveman, pi-web-access, pi-multimodal-proxy, pi-subagents,
-rpiv-ask-user-question, superpowers.
+Bundled: ponytail, caveman, pi-web-access, pi-multimodal-proxy,
+rpiv-ask-user-question, superpowers, pi-mcp-adapter, pi-codex-image-gen.

@@ -1,8 +1,5 @@
 # Personal working rules
 
-- Smallest diff that works. Reuse helpers that already exist instead of writing a
-  parallel one. No interface with one implementation, no config for a value that
-  never changes.
 - Mark a deliberate corner with its ceiling and upgrade path:
   `# ponytail: in-memory only, durable journal is the upgrade`.
 - Read before editing: trace the real flow end to end, grep every caller of a
