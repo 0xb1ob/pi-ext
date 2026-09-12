@@ -7,6 +7,7 @@ RAW=https://raw.githubusercontent.com/0xb1ob/pi-ext/main
 SETTINGS="${HOME}/.pi/agent/settings.json"
 
 command -v pi >/dev/null || { echo "pi not on PATH"; exit 1; }
+command -v node >/dev/null || { echo "node not on PATH"; exit 1; }
 
 install() { echo "pi install $1"; pi install "$1"; }
 
@@ -42,9 +43,10 @@ if [[ -n "$dir" && -f "$dir/patch-settings.mjs" ]]; then
 	node "$dir/patch-settings.mjs"
 else
 	tmp=$(mktemp)
-	curl -fsSL "$RAW/scripts/patch-settings.mjs" -o "$tmp"
-	node "$tmp"
-	rm -f "$tmp"
+	mv "$tmp" "$tmp.mjs"
+	curl -fsSL "$RAW/scripts/patch-settings.mjs" -o "$tmp.mjs"
+	node "$tmp.mjs"
+	rm -f "$tmp.mjs"
 fi
 
 echo "Restart pi."
