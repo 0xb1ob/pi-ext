@@ -34,7 +34,7 @@ const REQUIRED = [
 ];
 
 export const SETUP_CMD =
-	"curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/v1/scripts/setup.sh | bash";
+	"curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/main/scripts/setup.sh | bash";
 
 const sourceOf = (pkg: unknown) =>
 	typeof pkg === "string" ? pkg : pkg && typeof pkg === "object" && "source" in pkg ? String((pkg as { source: unknown }).source) : "";

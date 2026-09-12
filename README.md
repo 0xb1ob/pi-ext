@@ -7,33 +7,30 @@ this package, then run `setup.sh` once so they land as normal global
 ## New machine
 
 ```bash
-pi install git:github.com/0xb1ob/pi-ext@v1
+pi install git:github.com/0xb1ob/pi-ext
 ```
 
 Restart pi. If companions are missing, the extension tells you to run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/v1/scripts/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/main/scripts/setup.sh | bash
 ```
 
-That one-liner `pi install`s the pinned third-party packages globally, adds
+That one-liner `pi install`s the latest third-party packages globally, adds
 `find-skills`, and filters superpowers (extension off, 8 skills kept). Then
 restart pi again.
 
-`setup.sh` also installs `pi-ext@v1` if it is not already in settings, so the
+`setup.sh` also installs `pi-ext` if it is not already in settings, so the
 curl line alone is enough on a blank machine.
 
 ## Existing machine — update
 
 ```bash
-pi install git:github.com/0xb1ob/pi-ext@v1
-curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/v1/scripts/setup.sh | bash
+pi install git:github.com/0xb1ob/pi-ext
+curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/main/scripts/setup.sh | bash
 ```
 
 Restart pi.
-
-Bump a third-party pin: edit `scripts/setup.sh`, tag a new release (`v2`),
-point both commands at that tag.
 
 ## What this package injects
 

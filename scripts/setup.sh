@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # Global 3rd-party pi packages + find-skills + superpowers filter.
-# Safe as: curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/v1/scripts/setup.sh | bash
+# Safe as: curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/main/scripts/setup.sh | bash
 set -euo pipefail
 
-REF=v1
-RAW=https://raw.githubusercontent.com/0xb1ob/pi-ext/$REF
+RAW=https://raw.githubusercontent.com/0xb1ob/pi-ext/main
 SETTINGS="${HOME}/.pi/agent/settings.json"
 
 command -v pi >/dev/null || { echo "pi not on PATH"; exit 1; }
@@ -22,17 +21,17 @@ process.exit(pkgs.some((p) => String(typeof p === "string" ? p : p.source).inclu
 }
 
 if ! has_pkg pi-ext && ! has_pkg personal-extensions; then
-	install git:github.com/0xb1ob/pi-ext@$REF
+	install git:github.com/0xb1ob/pi-ext
 fi
 
-install npm:@dietrichgebert/ponytail@4.9.0
-install npm:@juicesharp/rpiv-ask-user-question@2.9.0
-install npm:pi-caveman@1.0.8
-install npm:pi-codex-image-gen@0.1.12
-install npm:pi-mcp-adapter@2.33.0
-install npm:pi-multimodal-proxy@1.18.1
-install npm:pi-web-access@0.27.0
-install git:github.com/obra/superpowers@v6.3.0
+install npm:@dietrichgebert/ponytail
+install npm:@juicesharp/rpiv-ask-user-question
+install npm:pi-caveman
+install npm:pi-codex-image-gen
+install npm:pi-mcp-adapter
+install npm:pi-multimodal-proxy
+install npm:pi-web-access
+install git:github.com/obra/superpowers
 
 echo "npx skills add vercel-labs/skills@find-skills"
 npx --yes skills add vercel-labs/skills --skill find-skills -g -a pi -y
