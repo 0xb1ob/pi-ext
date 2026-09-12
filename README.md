@@ -7,7 +7,7 @@ this package, then run `setup.sh` once so they land as normal global
 ## New machine
 
 ```bash
-pi install git:github.com/0xb1ob/pi-ext
+pi install git:github.com/0xb1ob/pi-ext@v1
 ```
 
 Restart pi. If companions are missing, the extension tells you to run:
@@ -26,7 +26,7 @@ curl line alone is enough on a blank machine.
 ## Existing machine — update
 
 ```bash
-pi install git:github.com/0xb1ob/pi-ext
+pi install git:github.com/0xb1ob/pi-ext@v1
 curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/main/scripts/setup.sh | bash
 ```
 
