@@ -1,49 +1,39 @@
-# personal-extensions
+# pi-ext
 
-Pi package that injects personal working rules. Third-party extensions and
-skills are not bundled — `scripts/setup.sh` installs them.
+Personal pi rules injector. Third-party packages are **not** bundled. Install
+this package, then run `setup.sh` once so they land as normal global
+`pi install`s.
 
 ## New machine
 
-Need `pi` and `git` on PATH.
-
 ```bash
-git clone https://github.com/0xb1ob/pi-ext.git
-cd pi-ext
-./scripts/setup.sh
+pi install git:github.com/0xb1ob/pi-ext@v1
 ```
 
-Restart pi.
+Restart pi. If companions are missing, the extension tells you to run:
 
-`setup.sh` is idempotent. It:
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/v1/scripts/setup.sh | bash
+```
 
-1. `pi install`s this checkout (rules extension)
-2. `pi install`s pinned third-party packages
-3. `npx skills add`s `find-skills` into `~/.pi/agent/skills/`
-4. Filters superpowers in `~/.pi/agent/settings.json`: extension off, 8 skills kept
+That one-liner `pi install`s the pinned third-party packages globally, adds
+`find-skills`, and filters superpowers (extension off, 8 skills kept). Then
+restart pi again.
 
-Dropped superpowers skills: `dispatching-parallel-agents`, `executing-plans`,
-`finishing-a-development-branch`, `subagent-driven-development`,
-`using-git-worktrees`, `using-superpowers`.
+`setup.sh` also installs `pi-ext@v1` if it is not already in settings, so the
+curl line alone is enough on a blank machine.
 
 ## Existing machine — update
 
 ```bash
-cd /path/to/pi-ext
-git pull
-./scripts/setup.sh
+pi install git:github.com/0xb1ob/pi-ext@v1
+curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/v1/scripts/setup.sh | bash
 ```
 
 Restart pi.
 
-That pulls rule/script changes, reinstalls the pins in `setup.sh`, refreshes
-find-skills, and reapplies the superpowers filter (needed if
-`pi update --extensions` rewrote that entry as a plain string).
-
-To bump a third-party package: edit the version in `scripts/setup.sh`, commit,
-then `git pull && ./scripts/setup.sh` on each machine.
-
-`node test.mjs` checks rule injection and the superpowers filter.
+Bump a third-party pin: edit `scripts/setup.sh`, tag a new release (`v2`),
+point both commands at that tag.
 
 ## What this package injects
 
@@ -57,6 +47,11 @@ then `git pull && ./scripts/setup.sh` on each machine.
 
 PATH probed once at load. Restart pi after installing `br`/`treehouse`.
 
-## Troubleshooting
+If required global packages/skills are missing, a short notice with the
+setup one-liner is appended too.
 
-Rules missing: check gates (`br`/`treehouse` on PATH, `.beads/` in cwd).
+Dropped superpowers skills: `dispatching-parallel-agents`, `executing-plans`,
+`finishing-a-development-branch`, `subagent-driven-development`,
+`using-git-worktrees`, `using-superpowers`.
+
+`node test.mjs` checks rule injection, companion gaps, and the superpowers filter.
