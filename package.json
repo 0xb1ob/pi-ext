@@ -2,53 +2,14 @@
   "name": "personal-extensions",
   "version": "1.0.0",
   "private": true,
-  "description": "Personal pi bundle: skills, extensions and always-on working rules",
+  "description": "Personal pi rules: style always, beads/treehouse when present",
   "type": "module",
   "keywords": [
     "pi-package"
   ],
   "pi": {
     "extensions": [
-      "extensions",
-      "node_modules/@dietrichgebert/ponytail/pi-extension/index.js",
-      "node_modules/@juicesharp/rpiv-ask-user-question/index.ts",
-      "node_modules/pi-caveman/extensions/caveman.ts",
-      "node_modules/pi-multimodal-proxy/extensions/vision-proxy.ts",
-      "node_modules/pi-web-access/index.ts",
-      "node_modules/pi-mcp-adapter/index.ts",
-      "node_modules/pi-codex-image-gen/index.ts"
-    ],
-    "skills": [
-      "skills",
-      "node_modules/@dietrichgebert/ponytail/skills",
-      "node_modules/superpowers/skills/brainstorming",
-      "node_modules/superpowers/skills/receiving-code-review",
-      "node_modules/superpowers/skills/requesting-code-review",
-      "node_modules/superpowers/skills/systematic-debugging",
-      "node_modules/superpowers/skills/test-driven-development",
-      "node_modules/superpowers/skills/verification-before-completion",
-      "node_modules/superpowers/skills/writing-plans",
-      "node_modules/superpowers/skills/writing-skills",
-      "node_modules/pi-codex-image-gen/skills",
-      "node_modules/pi-mcp-adapter/skills"
+      "extensions"
     ]
-  },
-  "dependencies": {
-    "@dietrichgebert/ponytail": "^4.9.0",
-    "@juicesharp/rpiv-ask-user-question": "^2.9.0",
-    "pi-caveman": "^1.0.8",
-    "pi-codex-image-gen": "^0.1.12",
-    "pi-mcp-adapter": "^2.33.0",
-    "pi-multimodal-proxy": "^1.18.1",
-    "pi-web-access": "^0.27.0",
-    "superpowers": "github:obra/superpowers#v6.3.0"
-  },
-  "peerDependencies": {
-    "@earendil-works/pi-coding-agent": "*"
-  },
-  "peerDependenciesMeta": {
-    "@earendil-works/pi-coding-agent": {
-      "optional": true
-    }
   }
 }
