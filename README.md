@@ -8,8 +8,8 @@ skills are not bundled — `scripts/setup.sh` installs them.
 Need `pi` and `git` on PATH.
 
 ```bash
-git clone https://github.com/0xb1ob/personal-extensions.git
-cd personal-extensions
+git clone https://github.com/0xb1ob/pi-ext.git
+cd pi-ext
 ./scripts/setup.sh
 ```
 
@@ -29,7 +29,7 @@ Dropped superpowers skills: `dispatching-parallel-agents`, `executing-plans`,
 ## Existing machine — update
 
 ```bash
-cd /path/to/personal-extensions
+cd /path/to/pi-ext
 git pull
 ./scripts/setup.sh
 ```
