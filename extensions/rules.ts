@@ -16,6 +16,9 @@ const onPath = (bin: string) =>
 const hasTreehouse = onPath("treehouse");
 const hasBr = onPath("br") || onPath("bd");
 
+// First heading of style.md ("# Personal working rules") — marks a prompt that already carries the rules.
+const RULES_MARKER = rule("style.md").split("\n", 1)[0];
+
 export function buildRules(cwd: string): string {
 	const parts = [rule("style.md")];
 	if (hasBr && existsSync(join(cwd, ".beads"))) parts.push(rule("beads.md"));
@@ -72,12 +75,22 @@ function companionNotice(): string {
 		return "";
 	}
 }
+/**
+ * Append rules unless they are already there.
+ *
+ * A pi-subagents child in `prompt_mode: append` inherits the parent's effective
+ * system prompt — rules included — and then loads this extension again in its own
+ * session, so an unconditional append lands every rule twice.
+ */
+export function augment(systemPrompt: string, cwd: string): string | undefined {
+	if (systemPrompt.includes(RULES_MARKER)) return undefined;
+	const extra = [buildRules(cwd), companionNotice()].filter(Boolean).join("\n\n");
+	return `${systemPrompt}\n\n${extra}`;
+}
 
 export default function personalRules(pi: ExtensionAPI) {
 	pi.on("before_agent_start", async (event) => {
-		const extra = [buildRules(event.systemPromptOptions?.cwd ?? process.cwd()), companionNotice()]
-			.filter(Boolean)
-			.join("\n\n");
-		return { systemPrompt: `${event.systemPrompt}\n\n${extra}` };
+		const systemPrompt = augment(event.systemPrompt, event.systemPromptOptions?.cwd ?? process.cwd());
+		return systemPrompt ? { systemPrompt } : undefined;
 	});
 }
