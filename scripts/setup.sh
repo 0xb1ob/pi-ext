@@ -4,32 +4,20 @@
 set -euo pipefail
 
 RAW=https://raw.githubusercontent.com/0xb1ob/pi-ext/main
-SETTINGS="${HOME}/.pi/agent/settings.json"
 
 command -v pi >/dev/null || { echo "pi not on PATH"; exit 1; }
 command -v node >/dev/null || { echo "node not on PATH"; exit 1; }
 
 install() { echo "pi install $1"; pi install "$1"; }
 
-has_pkg() {
-	[ -f "$SETTINGS" ] || return 1
-	node -e '
-const fs = require("node:fs");
-const n = process.argv[1];
-const pkgs = JSON.parse(fs.readFileSync(process.argv[2], "utf8")).packages || [];
-process.exit(pkgs.some((p) => String(typeof p === "string" ? p : p.source).includes(n)) ? 0 : 1);
-' "$1" "$SETTINGS"
-}
-
-if ! has_pkg pi-ext && ! has_pkg personal-extensions; then
-	install git:github.com/0xb1ob/pi-ext
-fi
-
+install git:github.com/0xb1ob/pi-ext@v1
 install npm:@dietrichgebert/ponytail
 install npm:@juicesharp/rpiv-ask-user-question
 install npm:pi-caveman
+install npm:pi-codex-image-gen
 install npm:pi-hashline-edit-pro
 install npm:pi-mcp-adapter
+install npm:pi-multimodal-proxy
 install npm:pi-web-access
 install npm:@tintinweb/pi-subagents
 install git:github.com/obra/superpowers

@@ -1,6 +1,6 @@
 // node test.mjs  — checks conditional rule injection
 import assert from "node:assert/strict";
-import { lstatSync, mkdirSync, mkdtempSync, readlinkSync, writeFileSync } from "node:fs";
+import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { buildRules, companionGaps } from "./extensions/rules.ts";
@@ -92,5 +92,12 @@ assert.deepEqual(linkPackageSkills(agent), ["ponytail"]);
 assert.equal(readlinkSync(join(agent, "skills/ponytail")), pony);
 assert.ok(!lstatSync(join(agent, "skills/keep-me")).isSymbolicLink());
 assert.deepEqual(linkPackageSkills(agent), ["ponytail"]);
+
+const setup = readFileSync(new URL("./scripts/setup.sh", import.meta.url), "utf8");
+assert.match(setup, /install git:github.com\/0xb1ob\/pi-ext@v1/);
+assert.ok(!setup.includes("has_pkg"), "setup always installs pi-ext, no skip");
+for (const n of ["pi-codex-image-gen", "pi-multimodal-proxy"]) {
+	assert.ok(setup.includes(n), `setup installs ${n}`);
+}
 
 console.log("ok");
