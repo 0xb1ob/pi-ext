@@ -1,8 +1,15 @@
 # Worktrees: use Treehouse
 
-When worktree isolation is needed, use **Treehouse** to acquire and release a
-pooled worktree. Do not create worktrees with `git worktree add` or agent tooling
-that bypasses Treehouse. Worktrees are optional for tasks that do not need isolation.
+Any task that creates a commit or branch runs in a leased Treehouse worktree.
+The main checkout stays on `main`, clean, and unclaimed so other sessions can
+lease it. "Isolation" means the checkout is a shared resource, not just
+conflict avoidance — a single-agent task with no file conflicts still leases.
+
+Work directly in the main checkout only for read-only inspection, or when the
+user says so explicitly.
+
+Do not create worktrees with `git worktree add` or agent tooling that bypasses
+Treehouse.
 
 ```bash
 # Inspect the pool from this repository
