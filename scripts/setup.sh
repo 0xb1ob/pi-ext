@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Global 3rd-party pi packages + find-skills + superpowers filter.
+# Global 3rd-party pi packages + superpowers filter.
 # Safe as: curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/main/scripts/setup.sh | bash
 set -euo pipefail
 
@@ -28,14 +28,11 @@ fi
 install npm:@dietrichgebert/ponytail
 install npm:@juicesharp/rpiv-ask-user-question
 install npm:pi-caveman
-install npm:pi-codex-image-gen
+install npm:pi-hashline-edit-pro
 install npm:pi-mcp-adapter
-install npm:pi-multimodal-proxy
 install npm:pi-web-access
+install npm:@tintinweb/pi-subagents
 install git:github.com/obra/superpowers
-
-echo "npx skills add vercel-labs/skills@find-skills"
-npx --yes skills add vercel-labs/skills --skill find-skills -g -a pi -y
 
 src=${BASH_SOURCE[0]:-}
 dir=$(cd "$(dirname "$src")" 2>/dev/null && pwd || true)

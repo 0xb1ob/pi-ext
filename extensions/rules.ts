@@ -28,9 +28,11 @@ const REQUIRED = [
 	"rpiv-ask-user-question",
 	"pi-caveman",
 	"pi-codex-image-gen",
+	"pi-hashline-edit-pro",
 	"pi-mcp-adapter",
 	"pi-multimodal-proxy",
 	"pi-web-access",
+	"@tintinweb/pi-subagents",
 ];
 
 export const SETUP_CMD =
@@ -39,7 +41,7 @@ export const SETUP_CMD =
 const sourceOf = (pkg: unknown) =>
 	typeof pkg === "string" ? pkg : pkg && typeof pkg === "object" && "source" in pkg ? String((pkg as { source: unknown }).source) : "";
 
-export function companionGaps(packages: unknown[], findSkills: boolean): string[] {
+export function companionGaps(packages: unknown[]): string[] {
 	const gaps: string[] = [];
 	for (const n of REQUIRED) {
 		if (!packages.some((p) => sourceOf(p).includes(n))) gaps.push(n);
@@ -57,15 +59,13 @@ export function companionGaps(packages: unknown[], findSkills: boolean): string[
 	) {
 		gaps.push("superpowers-filter");
 	}
-	if (!findSkills) gaps.push("find-skills");
 	return gaps;
 }
 
 function companionNotice(): string {
 	try {
 		const settings = JSON.parse(readFileSync(join(homedir(), ".pi/agent/settings.json"), "utf8"));
-		const findSkills = existsSync(join(homedir(), ".pi/agent/skills/find-skills/SKILL.md"));
-		const gaps = companionGaps(settings.packages ?? [], findSkills);
+		const gaps = companionGaps(settings.packages ?? []);
 		if (!gaps.length) return "";
 		return `## pi-ext companions missing\n\nNeed: ${gaps.join(", ")}\n\nTell user to run, then restart pi:\n\n${SETUP_CMD}`;
 	} catch {

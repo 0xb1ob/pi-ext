@@ -1,10 +1,10 @@
 // node test.mjs  — checks conditional rule injection
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync } from "node:fs";
+import { lstatSync, mkdirSync, mkdtempSync, readlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { buildRules, companionGaps } from "./extensions/rules.ts";
-import { patchPackages, SUPERPOWERS_SKILLS } from "./scripts/patch-settings.mjs";
+import { linkPackageSkills, patchPackages, SUPERPOWERS_SKILLS } from "./scripts/patch-settings.mjs";
 
 const plain = mkdtempSync(join(tmpdir(), "pe-"));
 const beads = mkdtempSync(join(tmpdir(), "pe-"));
@@ -33,12 +33,13 @@ assert.deepEqual(
 );
 
 assert.deepEqual(
-	companionGaps([], false).sort(),
+	companionGaps([]).sort(),
 	[
 		"@dietrichgebert/ponytail",
-		"find-skills",
+		"@tintinweb/pi-subagents",
 		"pi-caveman",
 		"pi-codex-image-gen",
+		"pi-hashline-edit-pro",
 		"pi-mcp-adapter",
 		"pi-multimodal-proxy",
 		"pi-web-access",
@@ -53,12 +54,13 @@ assert.deepEqual(
 			"npm:@juicesharp/rpiv-ask-user-question@2.9.0",
 			"npm:pi-caveman@1.0.8",
 			"npm:pi-codex-image-gen@0.1.12",
+			"npm:pi-hashline-edit-pro@4.3.2",
 			"npm:pi-mcp-adapter@2.33.0",
 			"npm:pi-multimodal-proxy@1.18.1",
 			"npm:pi-web-access@0.27.0",
+			"npm:@tintinweb/pi-subagents",
 			"git:github.com/obra/superpowers@v6.3.0",
 		],
-		true,
 	),
 	["superpowers-filter"],
 );
@@ -69,14 +71,26 @@ assert.deepEqual(
 			"npm:@juicesharp/rpiv-ask-user-question@2.9.0",
 			"npm:pi-caveman@1.0.8",
 			"npm:pi-codex-image-gen@0.1.12",
+			"npm:pi-hashline-edit-pro@4.3.2",
 			"npm:pi-mcp-adapter@2.33.0",
 			"npm:pi-multimodal-proxy@1.18.1",
 			"npm:pi-web-access@0.27.0",
+			"npm:@tintinweb/pi-subagents",
 			{ source: "git:github.com/obra/superpowers@v6.3.0", extensions: [], skills: SUPERPOWERS_SKILLS },
 		],
-		true,
 	),
 	[],
 );
+
+const agent = mkdtempSync(join(tmpdir(), "pe-agent-"));
+const pony = join(agent, "npm/node_modules/@dietrichgebert/ponytail/skills/ponytail");
+mkdirSync(pony, { recursive: true });
+writeFileSync(join(pony, "SKILL.md"), "---\nname: ponytail\ndescription: x\n---\n");
+mkdirSync(join(agent, "skills/keep-me"), { recursive: true });
+writeFileSync(join(agent, "skills/keep-me/SKILL.md"), "real\n");
+assert.deepEqual(linkPackageSkills(agent), ["ponytail"]);
+assert.equal(readlinkSync(join(agent, "skills/ponytail")), pony);
+assert.ok(!lstatSync(join(agent, "skills/keep-me")).isSymbolicLink());
+assert.deepEqual(linkPackageSkills(agent), ["ponytail"]);
 
 console.log("ok");

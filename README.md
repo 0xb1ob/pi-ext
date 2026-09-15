@@ -16,9 +16,10 @@ Restart pi. If companions are missing, the extension tells you to run:
 curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/main/scripts/setup.sh | bash
 ```
 
-That one-liner `pi install`s the latest third-party packages globally, adds
-`find-skills`, and filters superpowers (extension off, 8 skills kept). Then
-restart pi again.
+That one-liner `pi install`s the latest third-party packages globally,
+filters superpowers (extension off, 8 skills kept), and symlinks package
+skills into `~/.pi/agent/skills` so guessed skill paths hit. Then restart
+pi again.
 
 `setup.sh` also installs `pi-ext` if it is not already in settings, so the
 curl line alone is enough on a blank machine.
