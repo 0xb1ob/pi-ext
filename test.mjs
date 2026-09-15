@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { buildRules, companionGaps } from "./extensions/rules.ts";
+import { augment, buildRules, companionGaps } from "./extensions/rules.ts";
 import { linkPackageSkills, patchPackages, SUPERPOWERS_SKILLS } from "./scripts/patch-settings.mjs";
 
 const plain = mkdtempSync(join(tmpdir(), "pe-"));
@@ -12,6 +12,11 @@ mkdirSync(join(beads, ".beads"));
 
 assert.ok(buildRules(plain).includes("Personal working rules"), "style rules always injected");
 assert.ok(!buildRules(plain).includes("br ready"), "no beads rules without .beads/");
+
+// Append-mode subagents inherit the parent prompt, then load this extension again.
+const once = augment("BASE PROMPT", plain);
+assert.ok(once.includes("Personal working rules"), "rules appended to a clean prompt");
+assert.equal(augment(once, plain), undefined, "no second append when rules are already present");
 
 const withBeads = buildRules(beads).includes("br ready");
 console.log(`beads rules in .beads/ repo: ${withBeads} (false is correct when br is not installed)`);
