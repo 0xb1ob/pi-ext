@@ -26,9 +26,9 @@ treehouse get --lease --json --lease-holder "<task-or-session-id>"
 - A lease remains reserved until returned, even when no process is running.
   `treehouse enter` does not acquire a lease; do not use it to take another
   agent's worktree.
-- Before returning, finish or stop your worktree processes, sync Beads, commit
-  and push work that must be preserved, and verify the working tree is clean.
-  Return only your lease, using its recorded identity:
+- Before returning, finish or stop your worktree processes, sync Beads, leave
+  a PR with green CI (and review comments handled), and verify the working
+  tree is clean. Return only your lease, using its recorded identity:
 
 ```bash
 treehouse return "<leased-path>" --if-lease-id "<lease-id>"
@@ -37,3 +37,20 @@ treehouse return "<leased-path>" --if-lease-id "<lease-id>"
 Do not use `return --force`, `destroy`, or `prune` to bypass unresolved changes
 or interfere with another agent's work. If Treehouse is unavailable, report the
 blocker instead of silently falling back to unmanaged worktrees.
+
+Worktree work finishes as a PR. Commit, push, and open one without waiting to
+be asked.
+
+Once the PR is open, check first whether this repo has an automated code-review
+CI job (workflow files or the PR's announced checks). Do that before sitting
+on `gh pr checks --watch` so review can start while tests run.
+
+- Review job exists → wait for CI (including that job) to finish green. Read
+  the review, apply the comments that apply (verify first; skip or push back
+  on the rest).
+- No review job → dispatch `requesting-code-review` in a subagent now, in
+  parallel with waiting for the rest of CI. Act on that feedback the same way.
+
+CI red → fix root cause, push, wait again. After review fixes, push and wait
+CI green again. Do not return the lease until that loop is done. Do not merge
+unless asked.
