@@ -39,18 +39,19 @@ or interfere with another agent's work. If Treehouse is unavailable, report the
 blocker instead of silently falling back to unmanaged worktrees.
 
 Worktree work finishes as a PR. Commit, push, and open one without waiting to
-be asked.
+be asked. Nothing to publish (no commits, or the user aborted) → no PR; return
+the lease.
 
 Once the PR is open, check first whether this repo has an automated code-review
-CI job (workflow files or the PR's announced checks). Do that before sitting
+job (Copilot, CodeRabbit, or a review check on the PR). Do that before sitting
 on `gh pr checks --watch` so review can start while tests run.
 
 - Review job exists → wait for CI (including that job) to finish green. Read
   the review, apply the comments that apply (verify first; skip or push back
   on the rest).
-- No review job → dispatch `requesting-code-review` in a subagent now, in
+- No review job → run `requesting-code-review` (reviewer subagent) now, in
   parallel with waiting for the rest of CI. Act on that feedback the same way.
 
-CI red → fix root cause, push, wait again. After review fixes, push and wait
-CI green again. Do not return the lease until that loop is done. Do not merge
-unless asked.
+No announced checks → treat CI as green and continue. CI red → fix root cause,
+push, wait again. After review fixes, push and wait CI green again. Do not
+return the lease until that loop is done. Do not merge unless asked.
