@@ -45,6 +45,7 @@ assert.deepEqual(
 		"pi-caveman",
 		"pi-codex-image-gen",
 		"pi-hashline-edit-pro",
+		"pi-lens",
 		"pi-mcp-adapter",
 		"pi-multimodal-proxy",
 		"pi-web-access",
@@ -60,6 +61,7 @@ assert.deepEqual(
 			"npm:pi-caveman@1.0.8",
 			"npm:pi-codex-image-gen@0.1.12",
 			"npm:pi-hashline-edit-pro@4.3.2",
+			"npm:pi-lens@4.2.1",
 			"npm:pi-mcp-adapter@2.33.0",
 			"npm:pi-multimodal-proxy@1.18.1",
 			"npm:pi-web-access@0.27.0",
@@ -77,6 +79,7 @@ assert.deepEqual(
 			"npm:pi-caveman@1.0.8",
 			"npm:pi-codex-image-gen@0.1.12",
 			"npm:pi-hashline-edit-pro@4.3.2",
+			"npm:pi-lens@4.2.1",
 			"npm:pi-mcp-adapter@2.33.0",
 			"npm:pi-multimodal-proxy@1.18.1",
 			"npm:pi-web-access@0.27.0",
@@ -101,7 +104,7 @@ assert.deepEqual(linkPackageSkills(agent), ["ponytail"]);
 const setup = readFileSync(new URL("./scripts/setup.sh", import.meta.url), "utf8");
 assert.match(setup, /install git:github.com\/0xb1ob\/pi-ext@v1/);
 assert.ok(!setup.includes("has_pkg"), "setup always installs pi-ext, no skip");
-for (const n of ["pi-codex-image-gen", "pi-multimodal-proxy"]) {
+for (const n of ["pi-codex-image-gen", "pi-lens", "pi-multimodal-proxy"]) {
 	assert.ok(setup.includes(n), `setup installs ${n}`);
 }
 

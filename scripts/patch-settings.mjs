@@ -29,7 +29,7 @@ export function patchSettings(settings) {
 	return { ...settings, packages: patchPackages(settings.packages) };
 }
 
-const NPM_SKILL_PACKAGES = ["@dietrichgebert/ponytail", "pi-codex-image-gen", "pi-mcp-adapter"];
+const NPM_SKILL_PACKAGES = ["@dietrichgebert/ponytail", "pi-codex-image-gen", "pi-lens", "pi-mcp-adapter"];
 
 function skillDirsUnder(root) {
 	if (!existsSync(root)) return [];

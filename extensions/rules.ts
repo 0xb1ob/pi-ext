@@ -32,6 +32,7 @@ const REQUIRED = [
 	"pi-caveman",
 	"pi-codex-image-gen",
 	"pi-hashline-edit-pro",
+	"pi-lens",
 	"pi-mcp-adapter",
 	"pi-multimodal-proxy",
 	"pi-web-access",

@@ -16,6 +16,7 @@ install npm:@juicesharp/rpiv-ask-user-question
 install npm:pi-caveman
 install npm:pi-codex-image-gen
 install npm:pi-hashline-edit-pro
+install npm:pi-lens
 install npm:pi-mcp-adapter
 install npm:pi-multimodal-proxy
 install npm:pi-web-access
