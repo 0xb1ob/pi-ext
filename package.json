@@ -7,6 +7,9 @@
   "keywords": [
     "pi-package"
   ],
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": ">=0.86.0"
+  },
   "pi": {
     "extensions": [
       "extensions"
