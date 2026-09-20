@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { lstatSync, mkdirSync, mkdtempSync, readFileSync, readlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { augment, buildRules, companionGaps } from "./extensions/rules.ts";
+import { applyRules, buildRules, companionGaps } from "./extensions/rules.ts";
 import { linkPackageSkills, patchPackages, SUPERPOWERS_SKILLS } from "./scripts/patch-settings.mjs";
 
 const plain = mkdtempSync(join(tmpdir(), "pe-"));
@@ -13,10 +13,15 @@ mkdirSync(join(beads, ".beads"));
 assert.ok(buildRules(plain).includes("Personal working rules"), "style rules always injected");
 assert.ok(!buildRules(plain).includes("br ready"), "no beads rules without .beads/");
 
-// Append-mode subagents inherit the parent prompt, then load this extension again.
-const once = augment("BASE PROMPT", plain);
-assert.ok(once.includes("Personal working rules"), "rules appended to a clean prompt");
-assert.equal(augment(once, plain), undefined, "no second append when rules are already present");
+// 0.86+: mutate sections so pi can patch mid-convo without a full prompt rewrite.
+const sections = {};
+applyRules({ systemPrompt: "BASE PROMPT", systemPromptOptions: { cwd: plain, sections } });
+assert.ok(sections.personal_rules.includes("Personal working rules"), "rules land in personal_rules section");
+applyRules({ systemPrompt: sections.personal_rules, systemPromptOptions: { cwd: plain, sections } });
+assert.equal(Object.keys(sections).length, 1, "no second write when rules already in prompt");
+const already = { personal_rules: "keep" };
+applyRules({ systemPrompt: "BASE PROMPT", systemPromptOptions: { cwd: plain, sections: already } });
+assert.equal(already.personal_rules, "keep", "leave an existing personal_rules section");
 
 const withBeads = buildRules(beads).includes("br ready");
 console.log(`beads rules in .beads/ repo: ${withBeads} (false is correct when br is not installed)`);

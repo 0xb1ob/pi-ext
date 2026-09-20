@@ -76,22 +76,26 @@ function companionNotice(): string {
 		return "";
 	}
 }
+
+const SECTION = "personal_rules";
+
 /**
- * Append rules unless they are already there.
+ * Put rules in a named section. Returning `systemPrompt` forces a full rewrite (cache miss).
  *
- * A pi-subagents child in `prompt_mode: append` inherits the parent's effective
- * system prompt — rules included — and then loads this extension again in its own
- * session, so an unconditional append lands every rule twice.
+ * A pi-subagents child in `prompt_mode: append` inherits the parent's prompt — rules
+ * included — then loads this extension again, so skip when the marker is already there.
  */
-export function augment(systemPrompt: string, cwd: string): string | undefined {
-	if (systemPrompt.includes(RULES_MARKER)) return undefined;
-	const extra = [buildRules(cwd), companionNotice()].filter(Boolean).join("\n\n");
-	return `${systemPrompt}\n\n${extra}`;
+export function applyRules(event: {
+	systemPrompt: string;
+	systemPromptOptions: { cwd: string; sections: Record<string, string> };
+}): void {
+	if (event.systemPrompt.includes(RULES_MARKER) || event.systemPromptOptions.sections[SECTION]) return;
+	const extra = [buildRules(event.systemPromptOptions.cwd), companionNotice()].filter(Boolean).join("\n\n");
+	if (extra) event.systemPromptOptions.sections[SECTION] = extra;
 }
 
 export default function personalRules(pi: ExtensionAPI) {
-	pi.on("before_agent_start", async (event) => {
-		const systemPrompt = augment(event.systemPrompt, event.systemPromptOptions?.cwd ?? process.cwd());
-		return systemPrompt ? { systemPrompt } : undefined;
+	pi.on("before_agent_start", (event) => {
+		applyRules(event);
 	});
 }

@@ -14,7 +14,7 @@ That one-liner `pi install`s `pi-ext@v1` plus latest third-party packages global
 
 ## What this package injects
 
-`extensions/rules.ts` appends `rules/*.md` on `before_agent_start`:
+`extensions/rules.ts` writes `rules/*.md` into the `personal_rules` system-prompt section on `before_agent_start` (pi 0.86+ patch, not a full prompt rewrite):
 
 | File | Condition |
 |---|---|
@@ -24,7 +24,7 @@ That one-liner `pi install`s `pi-ext@v1` plus latest third-party packages global
 
 PATH probed once at load. Restart pi after installing `br`/`treehouse`.
 
-If required global packages/skills are missing, a short notice with the setup one-liner is appended too.
+If required global packages/skills are missing, a short notice with the setup one-liner is included in that section too.
 
 Dropped superpowers skills: `dispatching-parallel-agents`, `executing-plans`, `finishing-a-development-branch`, `subagent-driven-development`, `using-git-worktrees`, `using-superpowers`.
 
