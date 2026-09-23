@@ -8,9 +8,11 @@ RAW=https://raw.githubusercontent.com/0xb1ob/pi-ext/main
 command -v pi >/dev/null || { echo "pi not on PATH"; exit 1; }
 command -v node >/dev/null || { echo "node not on PATH"; exit 1; }
 
+echo "pi update --all"; pi update --all
+
 install() { echo "pi install $1"; pi install "$1"; }
 
-install git:github.com/0xb1ob/pi-ext@v1
+install git:github.com/0xb1ob/pi-ext
 install npm:@dietrichgebert/ponytail
 install npm:@juicesharp/rpiv-ask-user-question
 install npm:pi-caveman

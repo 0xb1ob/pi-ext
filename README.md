@@ -10,7 +10,7 @@ curl -fsSL https://raw.githubusercontent.com/0xb1ob/pi-ext/main/scripts/setup.sh
 
 Restart pi.
 
-That one-liner `pi install`s `pi-ext@v1` plus latest third-party packages globally, filters superpowers (extension off, 8 skills kept), and symlinks package skills into `~/.pi/agent/skills` so guessed skill paths hit.
+That one-liner runs `pi update --all`, then `pi install`s `pi-ext` (main branch) plus latest third-party packages globally, filters superpowers (extension off, 8 skills kept), and symlinks package skills into `~/.pi/agent/skills` so guessed skill paths hit.
 
 ## What this package injects
 
@@ -30,4 +30,4 @@ Dropped superpowers skills: `dispatching-parallel-agents`, `executing-plans`, `f
 
 `node test.mjs` checks rule injection, companion gaps, and the superpowers filter.
 
-Pi upgrades: `.agents/skills/updating-pi-harness/` (project skill; `/skill:updating-pi-harness`) walks changelog → impact check → package.json bump → `v1` tag.
+Pi upgrades: `.agents/skills/updating-pi-harness/` (project skill; `/skill:updating-pi-harness`) walks changelog → impact check → package.json bump → merge to main.

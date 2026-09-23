@@ -45,22 +45,18 @@ Adapt code for any hit. Keep `test.mjs` in sync with the API shape. Run `node te
 |---|---|---|
 | New pi version verified, no code change | minor | `>=NEW` |
 | Code changed for new pi API | minor | `>=NEW` |
-| Extension behavior breaks for users | major (also new tag `vN`) | `>=NEW` |
+| Extension behavior breaks for users | major | `>=NEW` |
 
 Keep 2-space JSON indent. Update README only where it names a pi version that is no longer accurate.
 
 ## 5. Ship
 
-Branch `pi-NEW`, commit, push, open PR. After merge, move the floating tag that `scripts/setup.sh` installs (`pi-ext@v1`):
+Branch `pi-NEW`, commit, push, open PR. `scripts/setup.sh` installs `pi-ext` from `main`, so merging ships it; users get it via `pi update --all` (or rerunning setup.sh).
 
-```bash
-git switch main && git pull && git tag -f v1 && git push -f origin v1
-```
-
-Ask the user before any push or tag move.
+Ask the user before any push.
 
 ## Common mistakes
 
 - Reading only 0.x.1 notes: breaking changes usually live in the intermediate 0.x.0 entry. Read the whole range.
 - Claiming "no impact" without grepping the `.d.ts` for the fields the extension reads.
-- Forgetting the `v1` tag: users installing via setup.sh keep the old commit.
+- Leaving the change unmerged: setup.sh tracks `main`, so users only get what's merged.

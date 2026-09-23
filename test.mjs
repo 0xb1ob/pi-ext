@@ -107,7 +107,7 @@ assert.ok(!lstatSync(join(agent, "skills/keep-me")).isSymbolicLink());
 assert.deepEqual(linkPackageSkills(agent), ["ponytail"]);
 
 const setup = readFileSync(new URL("./scripts/setup.sh", import.meta.url), "utf8");
-assert.match(setup, /install git:github.com\/0xb1ob\/pi-ext@v1/);
+assert.match(setup, /install git:github.com\/0xb1ob\/pi-ext$/m);
 assert.ok(!setup.includes("has_pkg"), "setup always installs pi-ext, no skip");
 for (const n of ["pi-codex-image-gen", "pi-lens", "pi-multimodal-proxy"]) {
 	assert.ok(setup.includes(n), `setup installs ${n}`);
