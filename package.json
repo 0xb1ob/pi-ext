@@ -1,6 +1,6 @@
 {
   "name": "personal-extensions",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Personal pi rules: style always, beads/treehouse when present",
   "type": "module",
@@ -8,7 +8,7 @@
     "pi-package"
   ],
   "peerDependencies": {
-    "@earendil-works/pi-coding-agent": ">=0.86.0"
+    "@earendil-works/pi-coding-agent": ">=0.87.1"
   },
   "pi": {
     "extensions": [

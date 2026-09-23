@@ -29,3 +29,5 @@ If required global packages/skills are missing, a short notice with the setup on
 Dropped superpowers skills: `dispatching-parallel-agents`, `executing-plans`, `finishing-a-development-branch`, `subagent-driven-development`, `using-git-worktrees`, `using-superpowers`.
 
 `node test.mjs` checks rule injection, companion gaps, and the superpowers filter.
+
+Pi upgrades: `.agents/skills/updating-pi-harness/` (project skill; `/skill:updating-pi-harness`) walks changelog → impact check → package.json bump → `v1` tag.
